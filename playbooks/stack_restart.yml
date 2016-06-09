@@ -1,29 +1,37 @@
-
 ---
-# bring stack down
-- hosts: loadbalancer
-  become: yes
-  tasks:
-    - service: name=nginx state=stopped
+  # bring service down
 
-- hosts: webserver
-  become: yes
-  tasks:
-    - service: name=apache2 state=stopped
+  - hosts: webservers
+    become: yes
+    tasks:
+      - service: name=apache2 state=stopped
+      - wait_for: port=80 state=stopped
 
-# restart mysql
-- hosts: database
-  become: yes
-  tasks:
-    - service: name=mysql state=restarted
+  - hosts: loadbalancer
+    become: yes
+    tasks:
+      - service: name=nginx state=stopped
+      - wait_for: port=80 state=drained
 
-# bring stack up
-- hosts: webserver
-  become: yes
-  tasks:
-    - service: name=apache2 stat=started
+# Restart mysql
 
-- hosts: loadbalancer
-  become: yes
-  tasks:
-    - service: name=nginx state=started
+  - hosts: database
+    become: yes
+    tasks:
+      - service: name=mysql state=restarted
+      - wait_for: port=3306 state=started
+
+
+  # Bring stack up
+
+  - hosts: webservers
+    become: yes
+    tasks:
+      - service: name=apache2 state=restarted enabled=yes
+      - wait_for: port=80
+
+  - hosts: loadbalancer
+    become: yes
+    tasks:
+      - service: name=nginx state=restarted enabled=yes
+      - wait_for: port=80
