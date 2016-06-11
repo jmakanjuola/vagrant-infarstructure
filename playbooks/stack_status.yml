@@ -24,7 +24,7 @@
       command: service mysql status
 
     - name: verify mysql is listening on 3306
-      wait_for: port=3306 timeout=1
+      wait_for: host={{ ansible_eth1.ipv4.address }} port=3306 timeout=1
 
 
 - hosts: control
@@ -50,7 +50,7 @@
 
 - hosts: loadbalancer
   tasks:
-    - name: verify backend response
+    - name: verify backend index response
       uri: url=http://{{item}} return_content=yes
       with_items: groups.webserver
       register: app_index
@@ -61,8 +61,9 @@
 
     - name: verify backend db response
       uri: url=http://{{item}}/db return_content=yes
+      with_items: groups.webserver
       register: app_db
 
-    - fail: msg=" db failed to return content"
+    - fail: msg="db failed to return content"
       when: "'Database Connected from {{item.item}}!' not in item.content"
-      with_items: "{{app_db.index.results}}"
+      with_items: "{{app_db.results}}"
