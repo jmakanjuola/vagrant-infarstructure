@@ -1,4 +1,0 @@
----
-db_name: "{{ vault_db_name }}"
-db_user: "{{ vault_db_user }}"
-db_pass: "{{ vault_db_pass }}"
