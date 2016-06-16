@@ -7,6 +7,7 @@
     tasks:
       - service: name=nginx state=stopped
       - wait_for: port=80 state=stopped
+        
 
   - hosts: webservers
     become: yes
@@ -14,6 +15,7 @@
     tasks:
       - service: name=apache2 state=stopped
       - wait_for: port=80 state=drained
+
 
 # Restart mysql
 
@@ -32,6 +34,7 @@
     tasks:
       - service: name=apache2 state=restarted
       - wait_for: port=80
+        changed_whe: false
 
   - hosts: loadbalancer
     become: yes
