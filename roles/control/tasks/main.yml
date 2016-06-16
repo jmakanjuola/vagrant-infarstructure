@@ -2,7 +2,13 @@
 # tasks file for control
 
 - name: install tools
-  apt: name={{item}} state=present update_cache=yes
+  apt: name={{item}} state=present 
   with_items:
     - curl
     - python-httplib2
+
+#- name: create new group
+#  group: name=admmin uid=1005 state=present
+
+- name: create new user
+  user: name=ops shell=/bin/bash groups=admin,operations  uid=1004
