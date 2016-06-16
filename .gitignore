@@ -1,0 +1,15 @@
+#Ignore complied Python source file
+*.pyc
+#Ignore SQlite database files
+*.sqlites3
+#ignore ansible control pub.key
+*.control.pub
+
+.DS_Store
+.Trashes
+.Spotligh-v100
+*.retry
+*.vagrant/
+**.pyc
+*.swp
+*~
