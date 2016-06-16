@@ -52,4 +52,9 @@ EOF
     h.vm.network "private_network", ip: "192.168.135.121"
     h.vm.provision :shell, inline: 'cat /vagrant/control.pub >> /home/vagrant/.ssh/authorized_keys'
   end
+
+  config.vm.define "test" do |h|
+    h.vm.network "private_network", ip: "192.168.135.125"
+    h.vm.provision :shell, inline: 'cat /vagrant/control.pub >> /home/vagrant/.ssh/authorized_keys'
+  end
 end
